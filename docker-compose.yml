@@ -1,0 +1,31 @@
+version: "3.9"
+services:
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: reservas
+    ports:
+      - "3306:3306"
+    volumes:
+      - dbdata:/var/lib/mysql
+  api:
+    build: .
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_NAME: reservas
+      DB_USER: root
+      DB_PASS: root
+      JWT_SECRET: super_secret_change_me
+      MAIL_HOST: smtp.example.com
+      MAIL_PORT: 587
+      MAIL_USER: user
+      MAIL_PASS: pass
+      MAIL_FROM: "PROGIII <no-reply@progiii.local>"
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+volumes:
+  dbdata:

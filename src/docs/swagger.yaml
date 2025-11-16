@@ -1,0 +1,63 @@
+openapi: 3.0.2
+info:
+  title: PROGIII API
+  version: "1.1.0"
+servers:
+  - url: /api
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+paths:
+  /auth/login:
+    post:
+      summary: Login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nombre_usuario: { type: string, example: admin@correo.com }
+                contrasenia: { type: string, example: admin123 }
+      responses:
+        "200": { description: ok }
+  /salones:
+    get: { summary: Listar salones, responses: {"200": {description: ok}} }
+    post:
+      summary: Crear salón (empleado/admin)
+      security: [{ bearerAuth: [] }]
+      responses: {"201": {description: creado}}
+  /reservas:
+    get:
+      summary: Listar reservas (empleado/admin)
+      security: [{ bearerAuth: [] }]
+      responses: {"200": {description: ok}}
+    post:
+      summary: Crear reserva (cliente/empleado/admin) - precios calculados server-side
+      security: [{ bearerAuth: [] }]
+      responses: {"201": {description: creado}}
+  /usuarios:
+    get:
+      summary: Listar usuarios (empleado/admin)
+      security: [{ bearerAuth: [] }]
+      responses: {"200": {description: ok}}
+    post:
+      summary: Crear usuario (admin)
+      security: [{ bearerAuth: [] }]
+      responses: {"201": {description: creado}}
+    delete:
+      summary: Borrar (soft) usuario (admin)
+      security: [{ bearerAuth: [] }]
+      responses: {"204": {description: borrado}}
+  /reports/reservas.csv:
+    get: { summary: Export CSV (admin), security: [{ bearerAuth: [] }], responses: {"200": {description: ok}} }
+  /reports/reservas.pdf:
+    get: { summary: Export PDF (admin), security: [{ bearerAuth: [] }], responses: {"200": {description: ok}} }
+  /reports/stats/por-mes:
+    get: { summary: Stats por mes (admin), security: [{ bearerAuth: [] }], responses: {"200": {description: ok}} }
+  /cron/send-reminders:
+    get: { summary: Enviar recordatorios (admin) - pensado para CRON, security: [{ bearerAuth: [] }], responses: {"200": {description: ok}} }
