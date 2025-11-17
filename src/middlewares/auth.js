@@ -1,19 +1,22 @@
 import jwt from "jsonwebtoken";
 
-export function verifyToken(req, res, next) {
-  const authHeader = req.headers.authorization;
+export function auth(required = true) {
+  return (req, res, next) => {
+    const header = req.headers["authorization"];
+    const token = header?.startsWith("Bearer ") ? header.slice(7) : null;
 
-  if (!authHeader) {
-    return res.status(401).json({ error: "Token requerido" });
-  }
+    if (!token) {
+      if (!required) return next();
+      return res.status(401).json({ message: "No autenticado" });
+    }
 
-  const token = authHeader.split(" ")[1];
-
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded; // id, email, rol
-    next();
-  } catch (error) {
-    return res.status(403).json({ error: "Token inválido" });
-  }
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      // decoded debe tener: usuario_id, tipo_usuario, nombre, apellido, nombre_usuario
+      req.user = decoded;
+      next();
+    } catch (e) {
+      return res.status(401).json({ message: "Token inválido" });
+    }
+  };
 }

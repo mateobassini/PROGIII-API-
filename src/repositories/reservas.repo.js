@@ -12,6 +12,21 @@ export async function listReservas() {
   return rows;
 }
 
+export async function listReservasByUser(usuario_id) {
+  const [rows] = await pool.query(
+    `
+    SELECT r.*, s.titulo AS salon, t.orden AS turno_orden
+    FROM reservas r
+    JOIN salones s ON s.salon_id = r.salon_id
+    JOIN turnos t ON t.turno_id = r.turno_id
+    WHERE r.activo = 1 AND r.usuario_id = :usuario_id
+    ORDER BY r.reserva_id DESC
+    `,
+    { usuario_id }
+  );
+  return rows;
+}
+
 export async function createReserva(data) {
   const conn = await pool.getConnection();
   try {

@@ -10,10 +10,8 @@ export async function list(req, res, next) {
 
     // cliente
     if (req.user.tipo_usuario === 1) {
-      reservas = await repo.listReservasByUser(req.user.id_usuario);
-    }
-    // admin
-    else {
+      reservas = await repo.listReservasByUser(req.user.usuario_id);
+    } else {
       reservas = await repo.listReservas();
     }
 

@@ -28,6 +28,20 @@ export async function softDeleteUsuario(id) {
   });
 }
 
+export async function listClientesActivos() {
+  const [rows] = await pool.query(
+    "SELECT usuario_id, nombre, apellido, nombre_usuario, tipo_usuario FROM usuarios WHERE activo=1 AND tipo_usuario=1"
+  );
+  return rows;
+}
+
+export async function listAdminsActivos() {
+  const [rows] = await pool.query(
+    "SELECT usuario_id, nombre, apellido, nombre_usuario, tipo_usuario FROM usuarios WHERE activo=1 AND tipo_usuario=3"
+  );
+  return rows;
+}
+
 export async function updateUsuario(id, data) {
   const fields = [];
   const params = { id };

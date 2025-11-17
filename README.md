@@ -3,6 +3,7 @@
 > Cumple con: autenticación JWT, autorización por roles, soft delete, validaciones, Swagger, procedimientos almacenados para estadísticas y exportes CSV/PDF. **Sin Sequelize u otros ORMs**.
 
 ## Instalación
+
 ```bash
 cp .env.example .env
 npm install
@@ -11,7 +12,9 @@ mysql -u root -p < src/sql/schema.sql
 mysql -u root -p reservas < src/sql/procedures.sql
 npm run dev
 ```
+
 ## Estructura
+
 - `src/config/db.js` pool MySQL.
 - `src/middlewares` JWT, roles, manejo de errores, validación.
 - `src/repositories` consultas SQL puras por entidad (patrón repository).
@@ -22,9 +25,10 @@ npm run dev
 - `src/sql/schema.sql` tablas, `procedures.sql` SPs.
 - **No subir `node_modules/` al repositorio**.
 
-
 ---
+
 ## ✅ Checklist de evaluación (10/10)
+
 - [x] **Sin ORMs** (SQL puro con mysql2/promise)
 - [x] **Arquitectura por capas** (routes → controllers → repositories → DB)
 - [x] **JWT + Roles** (1 cliente, 2 empleado, 3 admin)
@@ -42,19 +46,26 @@ npm run dev
 - [x] **Docker / docker-compose**
 
 ## CRON de recordatorios
+
 Ejemplo crontab (cada día a las 00:05):
+
 ```
 5 0 * * * curl -s -H "Authorization: Bearer <TOKEN_ADMIN>" http://localhost:3000/api/cron/send-reminders?hours=24
 ```
 
 ## Seeds
+
 ```
 mysql -u root -p reservas < src/sql/seed.sql
 mysql -u root -p reservas < src/sql/audit.sql
 ```
 
 ## Migración MD5 → bcrypt
-> Si tus usuarios tienen md5 y no conocés sus contraseñas originales, se recomienda política de reseteo.
+
 ```
 node scripts/migrate_md5_to_bcrypt.js
 ```
+
+## ROOT
+
+Solo se usa root para los comandos manuales (creación inicial), y la app se conecta con reservas_app

@@ -9,15 +9,13 @@ import {
 
 export async function obtenerTurnos(req, res, next) {
   try {
-    const { role, id } = req.user;
+    const { tipo_usuario, usuario_id } = req.user;
 
-    let turnos;
-
-    if (role === "admin") {
-      turnos = await getTurnos();
-    } else {
-      turnos = await getTurnosByUser(id);
-    }
+  if (tipo_usuario === 3) {
+    turnos = await getTurnos();
+  } else {
+    turnos = await getTurnosByUser(usuario_id);
+  }
 
     res.json(turnos);
   } catch (error) {

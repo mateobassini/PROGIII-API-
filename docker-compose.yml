@@ -27,5 +27,12 @@ services:
       - "3000:3000"
     depends_on:
       - db
+
+  environment:
+  MYSQL_ROOT_PASSWORD: root
+  MYSQL_DATABASE: reservas
+  MYSQL_USER: reservas_app
+  MYSQL_PASSWORD: reservas_app
+
 volumes:
   dbdata:

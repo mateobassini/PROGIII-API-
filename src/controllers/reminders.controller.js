@@ -8,11 +8,14 @@ export async function sendReminders(req, res, next) {
     const turnos = await obtenerTurnosParaRecordatorio(hours);
 
     for (const turno of turnos) {
-      await enviarMail(
-        turno.email,
-        "Recordatorio de reserva",
-        `Hola, recordamos su reserva para el día ${turno.fecha_reserva}`
-      );
+      await enviarMail({
+        to: turno.email,
+        subject: "Recordatorio de reserva",
+        html: `
+          <h3>Recordatorio de reserva</h3>
+          <p>Hola, te recordamos tu reserva para el día <b>${turno.fecha_reserva}</b>.</p>
+        `,
+      });
     }
 
     res.json({

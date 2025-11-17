@@ -40,3 +40,17 @@ export async function deleteTurno(id) {
   const [result] = await pool.query("DELETE FROM turnos WHERE id = ?", [id]);
   return result.affectedRows > 0;
 }
+
+export async function buscarTurnosParaRecordatorio(hours) {
+  const [rows] = await pool.query(
+    `
+    SELECT r.fecha_reserva, u.nombre_usuario AS email
+    FROM reservas r
+    JOIN usuarios u ON u.usuario_id = r.usuario_id
+    WHERE r.activo = 1
+      AND r.fecha_reserva BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL :hours HOUR)
+    `,
+    { hours }
+  );
+  return rows;
+}
